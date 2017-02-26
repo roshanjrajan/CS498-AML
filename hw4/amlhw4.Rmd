@@ -1,0 +1,26 @@
+---
+title: "AML hw4"
+author: "Kirsten Wong"
+date: "February 25, 2017"
+output: html_document
+---
+
+##Problem 1
+```{r, echo=TRUE}
+#a
+brunhild = read.csv("brunhild.txt", header=TRUE)
+loglogfit = lm(log(brunhild$Sulfate) ~ log(brunhild$Hours))
+plot(log(brunhild$Hours), log(brunhild$Sulfate))
+abline(loglogfit$coefficients)
+
+#b
+fit = lm(brunhild$Sulfate ~ brunhild$Hours)
+plot(brunhild$Hours, brunhild$Sulfate)
+abline(fit$coefficients)
+
+#c
+plot(loglogfit, which=c(1,1))
+
+```
+
+
