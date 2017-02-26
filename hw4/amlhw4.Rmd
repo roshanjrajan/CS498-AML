@@ -5,7 +5,7 @@ date: "February 25, 2017"
 output: html_document
 ---
 
-##Problem 1
+##Problem 1 7.9
 ```{r, echo=TRUE}
 #a
 brunhild = read.csv("brunhild.txt", header=TRUE)
@@ -23,4 +23,41 @@ plot(loglogfit, which=c(1,1))
 
 ```
 
-##Problem 2
+##Problem 2 7.10
+```{r, echo=TRUE}
+#a
+physical = read.csv("physical.txt", header=TRUE)
+fit2 = lm(Mass ~ Fore+Bicep+Chest+Neck+Shoulder+Waist+Height+Calf+Thigh+Head, data=physical)
+
+#plot(physical$Fore+physical$Bicep+physical$Chest+physical$Neck+physical$Shoulder+physical$Waist+physical$Height+physical$Calf+physical$Thigh+physical$Head, physical$Mass)
+#x = seq(650, 800, by=1)
+#y = (fit2$coef[1]+fit2$coef[2]+fit2$coef[3]+fit2$coef[4]+fit2$coef[5]+fit2$coef[6]+fit2$coef[7]+fit2$coef[8]+fit2$coef[9]+fit2$coef[10])*x
+#curve(x, add=TRUE)
+plot(fit2, which=c(1,1))
+
+#b
+cubedfit = lm(Mass^(1/3) ~ Fore+Bicep+Chest+Neck+Shoulder+Waist+Height+Calf+Thigh+Head, data=physical)
+plot(cubedfit, which=c(1,1))
+
+
+```
+
+##Problem 3 7.11
+```{r, echo=TRUE}
+#a
+abalone = read.csv("abalone.txt", header=TRUE)
+fit3 = lm(Age ~ Length+Diameter+Height+Whole+Shucked+Viscera+Shell, data=abalone)
+plot(fit3, which=c(1,1))
+
+#b
+fit4 = lm(Age ~ Sex+Length+Diameter+Height+Whole+Shucked+Viscera+Shell, data=abalone)
+plot(fit4, which=c(1,1))
+
+#c
+fit5 = lm(log(Age) ~ Length+Diameter+Height+Whole+Shucked+Viscera+Shell, data=abalone)
+plot(fit5, which=c(1,1))
+
+#d
+fit6 = lm(log(Age) ~ Sex+Length+Diameter+Height+Whole+Shucked+Viscera+Shell, data=abalone)
+plot(fit6, which=c(1,1))
+```
