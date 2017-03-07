@@ -12,24 +12,35 @@ brunhild = read.csv("brunhild.txt", header=TRUE)
 loglogfit = lm(log(brunhild$Sulfate) ~ log(brunhild$Hours))
 plot(log(brunhild$Hours), log(brunhild$Sulfate), main = "log(sulfate) vs log(hours)", xlab="log(hours)",ylab="log(sulfate)")
 abline(loglogfit$coefficients)
+```
 
+a. Here is a plot showing the data points and the regression line in log-log coordinates.
+
+```{r, echo=TRUE}
 #b
 fit = lm(brunhild$Sulfate ~ brunhild$Hours)
 plot(brunhild$Hours, brunhild$Sulfate, main = "sulfate vs hours", xlab="hours",ylab="sulfate")
 abline(fit$coefficients)
+```
 
+b. Here is a plot showing the data points and the regression line in the original coordinates.
+
+```{r, echo=TRUE}
 #c
 plot(loglogfit, which=c(1,1))
 plot(fit, which=c(1,1))
+```
 
+c. Here we can compare the plots regarding the residuals against fitted values in the different coordinates.
+```{r, echo=TRUE}
 #d
 print(summary(loglogfit)$r.squared)
 print(summary(fit)$r.squared)
 
 ```
 d.
-Taking the log of both the Hours and Sulfates variables is a much better fit than the original coordinates. In the first plot, the points don't fall too far from the fit line, and the r-squared value is much higher with the log fit than the original fit.
-
+Taking the log of both the Hours and Sulfates variables is a much better fit than the original coordinates. In the first plot, the points don't fall too far from the fit line while in the second plot there is a clear discrepancy between the regression line and the data points. This is further emphazied by comparing the r-sqaured values for both fits in that the r-squared value is much higher with the log-log fit than the original fit.
+  
 ##Problem 2 7.10
 ```{r, echo=TRUE}
 #a
@@ -37,11 +48,19 @@ physical = read.csv("physical.txt", header=TRUE)
 fit2 = lm(Mass ~ Fore+Bicep+Chest+Neck+Shoulder+Waist+Height+Calf+Thigh+Head, data=physical)
 
 plot(fit2, which=c(1,1))
+```
 
+a. Here we can see the residuals against the fitted values in the original coordinates.
+
+```{r, echo=TRUE}
 #b
 cubedfit = lm(Mass^(1/3) ~ Fore+Bicep+Chest+Neck+Shoulder+Waist+Height+Calf+Thigh+Head, data=physical)
 plot(cubedfit, which=c(1,1))
+```
 
+b. Here we can see the residuals against the fitted values in the cube root coordinates.
+
+```{r, echo=TRUE}
 #c
 print(summary(fit2)$r.squared)
 print(summary(cubedfit)$r.squared)
@@ -54,26 +73,38 @@ c. Both of the residual vs fitted plots look random. The r-squared values are bo
 abalone = read.csv("abalone.txt", header=TRUE)
 fit3 = lm(Age ~ Length+Diameter+Height+Whole+Shucked+Viscera+Shell, data=abalone)
 plot(fit3, which=c(1,1))
+```
 
+a. Here we can see the residuals again the fitted values when predicting age from measurements ignoring gender.
+```{r, echo=TRUE}
 #b
 fit4 = lm(Age ~ Sex+Length+Diameter+Height+Whole+Shucked+Viscera+Shell, data=abalone)
 plot(fit4, which=c(1,1))
+```
 
+b. Here we can see the residuals again the fitted values when predicting age from measurements including gender.
+```{r, echo=TRUE}
 #c
 fit5 = lm(log(Age) ~ Length+Diameter+Height+Whole+Shucked+Viscera+Shell, data=abalone)
 plot(fit5, which=c(1,1))
+```
 
+c. Here we can see the residuals again the fitted values when predicting log of age from measurements ignoring gender.
+```{r, echo=TRUE}
 #d
 fit6 = lm(log(Age) ~ Sex+Length+Diameter+Height+Whole+Shucked+Viscera+Shell, data=abalone)
 plot(fit6, which=c(1,1))
+```
 
+d. Here we can see the residuals again the fitted values when predicting log of age from measurements including gender.
+```{r, echo=TRUE}
 #e
 print(summary(fit3)$r.squared) #ignores gender
 print(summary(fit4)$r.squared) #includes gender
 print(summary(fit5)$r.squared) #ignores gender, uses log of age
 print(summary(fit6)$r.squared) #includes gender, uses log of age
 ```
-e. Comparing fit3 with fit4, and fit5 with fit 6, they are not very different. This shows us that gender does not play a very big part in determining age. fit5 and fit6, which take the log of the age, have slightly better r-squared values than fit3 and fit4, so we would use the regression with the log of ages for prediction. 
+e. Comparing residuals of the linear regression in the original cooordinates and the residuals of the linear regression in the log coordinates, the r-sqaured values for all fits are not very different. This shows us that gender does not play a very big part in determining age. The 2nd pair of residuals plots for fit5 and fit6, which take the log of the age, have slightly better r-squared values than fit3 and fit4, so we would use the regression to predict the log of the ages given the measurements.
 
 ```{r, echo=TRUE}
 #f
@@ -83,4 +114,12 @@ x = as.matrix(data.frame(abalone$Sex, abalone$Length, abalone$Diameter, abalone$
 
 cvfit = cv.glmnet(x, y=abalone$Age)
 plot(cvfit)
+
+xlogfactors = model.matrix(log(abalone$Age) ~ abalone$Sex)
+cvlogfit = cv.glmnet(x, y=log(abalone$Age))
+plot(cvlogfit)
 ```
+
+f. We can see that the regularization does not have really have an effect in that it is very similiar to the original value when comparing to the regressions seen before.This might change for other problems, but we can see that in this case regularizing the linear regression does not give a better fit. 
+
+
