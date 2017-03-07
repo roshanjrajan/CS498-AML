@@ -1,7 +1,7 @@
 ---
 title: "AML hw4"
-author: "Kirsten Wong"
-date: "February 25, 2017"
+author: "Kirsten Wong, Kenneth Zhang, Roshan Rajan"
+date: "March 6, 2017"
 output: html_document
 ---
 
@@ -10,12 +10,12 @@ output: html_document
 #a
 brunhild = read.csv("brunhild.txt", header=TRUE)
 loglogfit = lm(log(brunhild$Sulfate) ~ log(brunhild$Hours))
-plot(log(brunhild$Hours), log(brunhild$Sulfate))
+plot(log(brunhild$Hours), log(brunhild$Sulfate), main = "Cool", xlab="Thing",ylab="Some")
 abline(loglogfit$coefficients)
 
 #b
 fit = lm(brunhild$Sulfate ~ brunhild$Hours)
-plot(brunhild$Hours, brunhild$Sulfate)
+plot(brunhild$Hours, brunhild$Sulfate, main = "Cool", xlab="Thing",ylab="Some")
 abline(fit$coefficients)
 
 #c
