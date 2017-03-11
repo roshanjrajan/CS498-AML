@@ -6,10 +6,14 @@ output: html_document
 ---
 
 ## Q1:
-
-First, build a straightforward linear regression of latitude (resp. longitude) against features. What is the R-squared? Plot a graph evaluating each regression.
+The UCI Machine Learning dataset repository hosts a dataset giving features of music, and the latitude and longitude from which that music originates.
 ```{r, echo=TRUE}
 tracks = read.csv("default_plus_chromatic_features_1059_tracks.txt", header=TRUE)
+
+```
+First, build a straightforward linear regression of latitude (resp. longitude) against features. What is the R-squared? Plot a graph evaluating each regression.
+```{r, echo=TRUE}
+
 
 ```
 Does a Box-Cox transformation improve the regressions? Notice that the dependent variable has some negative values, which Box-Cox doesn't like. You can deal with this by remembering that these are angles, so you get to choose the origin. why do you say so? For the rest of the exercise, use the transformation if it does improve things, otherwise, use the raw data.
@@ -28,9 +32,13 @@ A regression regularized by L1 (equivalently, a lasso regression). You should es
 ```
 
 ## Q2:
-Use logistic regression to predict whether the user defaults. You should ignore outliers, but you should try the various regularization schemes we have discussed.
+The UCI Machine Learning dataset repository hosts a dataset giving whether a Taiwanese credit card user defaults against a variety of features.
 ```{r, echo=TRUE}
 tracks = read.csv("default_of_credit_card_clients.csv", header=TRUE)
+```
+Use logistic regression to predict whether the user defaults. You should ignore outliers, but you should try the various regularization schemes we have discussed.
+```{r, echo=TRUE}
+
 ```
 
 ## Q3:
