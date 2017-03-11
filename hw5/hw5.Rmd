@@ -1,28 +1,50 @@
 ---
-title: "hw5"
+title: "AML hw5"
+author: "Roshan Rajan, Kirsten Wong, Kenneth Zhang"
+date: "March 11, 2017"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+## Q1:
+
+First, build a straightforward linear regression of latitude (resp. longitude) against features. What is the R-squared? Plot a graph evaluating each regression.
+```{r, echo=TRUE}
+tracks = read.csv("default_plus_chromatic_features_1059_tracks.txt", header=TRUE)
+
+```
+Does a Box-Cox transformation improve the regressions? Notice that the dependent variable has some negative values, which Box-Cox doesn't like. You can deal with this by remembering that these are angles, so you get to choose the origin. why do you say so? For the rest of the exercise, use the transformation if it does improve things, otherwise, use the raw data.
+```{r, echo=TRUE}
+
+```
+Use glmnet to produce:
+A regression regularized by L2 (equivalently, a ridge regression). You should estimate the regularization coefficient that produces the minimum error. Is the regularized regression better than the unregularized regression?
+```{r, echo=TRUE}
+
+```
+A regression regularized by L1 (equivalently, a lasso regression). You should estimate the regularization coefficient that produces the minimum error. How many variables are used by this regression? Is the regularized regression better than the unregularized regression?
+
+```{r, echo=TRUE}
+
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+## Q2:
+Use logistic regression to predict whether the user defaults. You should ignore outliers, but you should try the various regularization schemes we have discussed.
+```{r, echo=TRUE}
+tracks = read.csv("default_of_credit_card_clients.csv", header=TRUE)
 ```
 
-## Including Plots
+## Q3:
+A wide dataset, from cancer genetics: In "Broad patterns of gene expression revealed by clustering of tumor and normal colon tissues probed by oligonucleotide arrays" by U. Alon, N. Barkai, D. A. Notterman, K. Gish, S. Ybarra, D. Mack, and A. J. Levine, Proc. Natl. Acad. Sci. USA, Vol. 96, Issue 12, 6745-6750, June 8, 1999, authors collected data giving gene expressions for tumorous and normal colon tissues. You will find this dataset here. There is a matrix of gene expression levels for 2000 genes (these are the independent variables) for 62 tissue samples. As you can see, there are a lot more independent variables than there are data items. At that website, you will also find a file giving which sample is tumorous and which is normal.
+```{r, echo=TRUE}
+tracks = read.csv("genes.txt", header=TRUE)
+```
+Use a binomial regression model (i.e. logistic regression) with the lasso to predict tumorous/normal. Use cross-validation to assess how accurate your model is. Report both AUC (below) and deviance. How many genes does the best model use?
+```{r, echo=TRUE}
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Q4:
+AUC: is one standard measure of classification performance, reported by glmnet; look this up here , but the key phrase is "When using normalized units, the area under the curve (often referred to as simply the AUC, or AUROC) is equal to the probability that a classifier will rank a randomly chosen positive instance higher than a randomly chosen negative one (assuming 'positive' ranks higher than 'negative')."
+```{r, echo=TRUE}
+
+```
