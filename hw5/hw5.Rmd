@@ -8,27 +8,56 @@ output: html_document
 ## Q1:
 The UCI Machine Learning dataset repository hosts a dataset giving features of music, and the latitude and longitude from which that music originates.
 ```{r, echo=TRUE}
-tracks = read.csv("default_plus_chromatic_features_1059_tracks.txt", header=TRUE)
-
+library(MASS)
+library(glmnet)
+tracks = read.csv("default_plus_chromatic_features_1059_tracks.txt", header=FALSE)
 ```
 First, build a straightforward linear regression of latitude (resp. longitude) against features. What is the R-squared? Plot a graph evaluating each regression.
 ```{r, echo=TRUE}
+latfit = lm(tracks[,117] ~ rowSums(tracks[,1:116]))
+longfit = lm(tracks[,118] ~ rowSums(tracks[,1:116]))
 
+plot(latfit, which=c(1,1))
+plot(longfit, which=c(1,1))
 
+print(c(summary(latfit)$r.squared, summary(longfit)$r.squared))
 ```
 Does a Box-Cox transformation improve the regressions? Notice that the dependent variable has some negative values, which Box-Cox doesn't like. You can deal with this by remembering that these are angles, so you get to choose the origin. why do you say so? For the rest of the exercise, use the transformation if it does improve things, otherwise, use the raw data.
 ```{r, echo=TRUE}
+latfit2 = lm(tracks[,117] - min(tracks[,117])+1 ~ rowSums(tracks[,1:116]+1))
+longfit2 = lm(tracks[,118] - min(tracks[,118])+1 ~ rowSums(tracks[,1:116]+1))
+plot(rowSums(tracks[,1:116]), tracks[,117]+100)
 
+bclat = boxcox(latfit2, lambda=seq(-6,6,0.1))
+bclong = boxcox(longfit2, lambda=seq(-6,6,0.1))
+
+#finds best lambda from each boxcox
+lambdalat = bclat$x[which.max(bclat$y)]
+lambdalong = bclong$x[which.max(bclong$y)]
+
+#transforms the dependent variable based on boxcox lambda
+latfit2 = lm((tracks[,117]^lambdalat-1)/lambdalat ~ rowSums(tracks[,1:116]))
+longfit2 = lm((tracks[,118]^lambdalong-1)/lambdalong ~ rowSums(tracks[,1:116]))
+print(c(summary(latfit2)$r.squared, summary(longfit2)$r.squared))
 ```
 Use glmnet to produce:
 A regression regularized by L2 (equivalently, a ridge regression). You should estimate the regularization coefficient that produces the minimum error. Is the regularized regression better than the unregularized regression?
 ```{r, echo=TRUE}
+#lasso: alpha=1
+#ridge: alpha=0
+#elastic: alpha=0.5
+ridgefit = cv.glmnet(as.matrix(tracks[,1:116]), as.matrix(tracks[,117]), alpha=0)
+plot(ridgefit)
 
+newy = predict(ridgefit, newx = as.matrix(tracks[,1:116]), s = "lambda.min")
+ridgefit2 = lm(newy ~ rowSums(tracks[,1:116]))
+print(summary(ridgefit2)$r.squared)
 ```
 A regression regularized by L1 (equivalently, a lasso regression). You should estimate the regularization coefficient that produces the minimum error. How many variables are used by this regression? Is the regularized regression better than the unregularized regression?
 
 ```{r, echo=TRUE}
-
+lassofit = cv.glmnet(as.matrix(tracks[,1:116]), as.matrix(tracks[,117]), alpha=1)
+plot(lassofit)
 ```
 
 ## Q2:
