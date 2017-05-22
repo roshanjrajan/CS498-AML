@@ -21,7 +21,7 @@ import os
 import tensorflow as tf
 import urllib
 
-LOGDIR = '/tmp/mnist_tutorial/'
+LOGDIR = '/tmp/mnist_tutorial4/'
 GIST_URL = 'https://gist.githubusercontent.com/dandelionmane/4f02ab8f1451e276fea1f165a20336f1/raw/dfb8ee95b010480d56a73f324aca480b3820c180'
 
 ### MNIST EMBEDDINGS ###
@@ -89,19 +89,18 @@ def mnist_model(learning_rate, use_two_conv, use_two_fc, hparam):
   keep_prob = tf.placeholder(tf.float32)
 
   if use_two_conv:
-    conv1 = conv_layer2(x_image, 1, 8, "conv1")
-    conv_2 = conv_layer2(conv1, 8, 16, "conv2")
-    conv_3 = conv_layer2(conv2, 16, 24, "conv3")
-    conv_out = conv_layer2(conv3, 24, 32, "conv4")
+    conv1 = conv_layer2(x_image, 1, 32, "conv1")
+    conv2 = conv_layer2(conv1, 32, 16, "conv2")
+    conv_out = conv_layer2(conv2, 16, 8, "conv3")
   else:
     conv1 = conv_layer(x_image, 1, 64, "conv")
     conv_out = tf.nn.max_pool(conv1, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding="SAME")
 
-  flattened = tf.reshape(conv_out, [-1, 7 * 7 * 64])
+  flattened = tf.reshape(conv_out, [-1, 28 * 28 * 8])
 
 
   if use_two_fc:
-    fc1 = fc_layer(flattened, 7 * 7 * 64, 1024, "fc1")
+    fc1 = fc_layer(flattened, 28 * 28 * 8, 1024, "fc1")
     keep_prob = tf.placeholder(tf.float32)
     fc1 = tf.nn.dropout(fc1, keep_prob)
     embedding_input = fc1
